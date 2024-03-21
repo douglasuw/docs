@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Consulta de Protocolo</title>
+	<style type="text/css">
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 10px;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 20px auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		#protocolo-details {
+			margin-top: 20px;
+		}
+
+	</style>
+</head>
+<body>
+	
+	<div class="container">
+		<h1>Resumo do Protocolo</h1>
+		<div id="protocolo-resume"></div>
+	</div>
+	<div class="container">
+		<h1>Detalhes do Protocolo</h1>
+		<div id="protocolo-details"></div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const endpoint = 'https://risaojose-sc.sistemaasgard.com.br/api/public/site/acompanhamento/PROTOCOLO/7393/12237175';
+
+			fetch(endpoint)
+			.then(response => response.json())
+			.then(data => {
+				displayProtocoloDetails(data);
+			})
+			.catch(error => {
+				console.error('Erro ao obter dados do servidor:', error);
+			});
+
+			function displayProtocoloDetails(protocolo) {
+				const protocoloDetailsDiv = document.getElementById('protocolo-resume');
+
+				protocoloDetailsDiv.innerHTML = `
+				<p><strong>Código:</strong> ${protocolo.codigo}</p>
+				<p><strong>Etapa:</strong> ${protocolo.etapa}</p>
+				<p><strong>Status:</strong> ${protocolo.status}</p>
+				<p><strong>Custo:</strong> ${protocolo.custo}</p>
+				<p><strong>Entrada:</strong> ${protocolo.entrada}</p>
+				<p><strong>Saldo:</strong> ${protocolo.saldo}</p>
+				<p><strong>Total:</strong> ${protocolo.total}</p>
+				<p><strong>Vencimento:</strong> ${protocolo.vencimento}</p>
+				<p><strong>Interessado:</strong> ${protocolo.interessado}</p>
+				<p><strong>Solicitante:</strong> ${protocolo.solicitante}</p>
+				`;
+			}
+		});
+
+
+		document.addEventListener("DOMContentLoaded", function() {
+			const endpoint = 'https://risaojose-sc.sistemaasgard.com.br/api/public/site/acompanhamento/PROTOCOLO/7393/12237175';
+
+			fetch(endpoint)
+			.then(response => response.json())
+			.then(data => {
+				displayProtocoloDetails(data);
+			})
+			.catch(error => {
+				console.error('Erro ao obter dados do servidor:', error);
+			});
+
+			function displayProtocoloDetails(protocolo) {
+				const protocoloDetailsDiv = document.getElementById('protocolo-details');
+				let protocoloHTML = '<ul>';
+
+				for (const [key, value] of Object.entries(protocolo)) {
+					protocoloHTML += `<li><strong>${key}:</strong> ${getValueAsString(value)}</li>`;
+				}
+
+				protocoloHTML += '</ul>';
+				protocoloDetailsDiv.innerHTML = protocoloHTML;
+			}
+
+			function getValueAsString(value) {
+				if (typeof value === 'object') {
+					if (value === null) {
+						return 'null';
+					} else if (Array.isArray(value)) {
+						return value.map(item => getValueAsString(item)).join(', ');
+					} else {
+						let objectString = '<ul>';
+						for (const [key, val] of Object.entries(value)) {
+							objectString += `<li><strong>${key}:</strong> ${getValueAsString(val)}</li>`;
+						}
+						objectString += '</ul>';
+						return objectString;
+					}
+				} else {
+					return value;
+				}
+			}
+		});
+
+	</script>
+
+</body>
+</html>
